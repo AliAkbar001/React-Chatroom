@@ -1,24 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter as Router, Routes , Route } from 'react-router-dom'
+import { UserContext } from './UserContext';
+import Home from './components/home/Home';
+import Chat from './components/chat/Chat';
+import { useState } from 'react';
 
 function App() {
+  const [user, setUser] = useState(null);
   return (
+    <Router>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <UserContext.Provider value={{user,setUser}}>
+      <Routes >
+         <Route exact path="/" element={<Home/>}/>
+         <Route path="/chat" element={<Chat/>}/>
+      </Routes >
+    </UserContext.Provider>
     </div>
+    </Router>
   );
 }
 
