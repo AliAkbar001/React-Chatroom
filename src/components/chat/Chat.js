@@ -15,7 +15,7 @@ const Chat = () => {
 
   useEffect(() => {
     socket = io(EndPoint)
-    socket.emit('join', {name:user.name, room_id, user_id:user.id})
+    socket.emit('join', {name:user.name, room_id, user_id:user._id})
   }, [])
 
   useEffect(()=>{
@@ -43,7 +43,7 @@ const Chat = () => {
       <h5>Room ID: {room_id}</h5>
       <h5>Room Name: {room_name}</h5>
       <br/>
-      <MessageBox messages={messages} user_id={user.id}/>
+      <MessageBox messages={messages} user_id={user._id}/>
       <form action='' onSubmit={handleMessage}>
         <input
           type='text'

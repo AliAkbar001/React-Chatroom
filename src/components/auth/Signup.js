@@ -1,7 +1,9 @@
-import React,{useState} from 'react'
+import React, { useContext, useState } from 'react'
+import { UserContext } from '../../UserContext'
+import {Navigate} from 'react-router-dom'
 
 const Signup = () => {
-
+  const {user, setUser} = useContext(UserContext)
   const [signupFields, setSignupFields] = useState({name:'',email:'',password:''})
   const [errors, setErrors] = useState({name:'',email:'',password:''})
 
@@ -24,13 +26,17 @@ const Signup = () => {
       if(data.status === 400){
         setErrors(data.errors)
       }else{
-        alert(JSON.stringify(data))
+        alert(JSON.stringify(data.user))
         setSignupFields({name:'',email:'',password:''})
         setErrors({name:'',email:'',password:''})
+        setUser(data.user)
       }
     }catch(error){
       alert(error)
     }
+  }
+  if(user){
+    return <Navigate to='/' replace={true}/>
   }
   return (
     <div>
