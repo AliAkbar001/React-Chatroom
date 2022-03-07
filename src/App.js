@@ -5,6 +5,8 @@ import Home from './components/home/Home';
 import Chat from './components/chat/Chat';
 import { useState } from 'react';
 import Navbar from './components/layout/Navbar';
+import Login from './components/auth/Login';
+import Signup from './components/auth/Signup';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -16,6 +18,8 @@ function App() {
       <Routes >
          <Route exact path="/" element={<Home/>}/>
          <Route path="/chat/:room_id/:room_name" element={<Chat/>}/>
+         <Route path="/login" element={<Login/>}/>
+         <Route path="/signup" element={<Signup/>}/>
       </Routes >
     </UserContext.Provider>
     </div>

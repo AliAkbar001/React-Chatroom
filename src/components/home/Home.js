@@ -8,6 +8,7 @@ let socket;
 const Home = () => {
   const {user, setUser} = useContext(UserContext)
   const [room, setRoom] = useState('')
+  const [rooms, setRooms] = useState([])
   const EndPoint = 'localhost:4000'
 
   useEffect(()=>{
@@ -18,13 +19,18 @@ const Home = () => {
     }
   },[EndPoint])
 
-  const rooms = [{
-    name: 'room1',
-    _id: '1'
-  },{
-    name: 'room2',
-    _id: '2'
-  }]
+  useEffect(()=>{
+    socket.on('output-rooms', rooms=>{
+      setRooms(rooms)
+    })
+  },[])
+
+  useEffect(()=>{
+    socket.on('room-created', room=>{
+      setRooms([...rooms,room])
+    })
+  },[rooms])
+
   const handleSubmit = e => {
     e.preventDefault()
     socket.emit('create-room', room)
@@ -59,7 +65,7 @@ const Home = () => {
             <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="input-field col s6">
-                  <input 
+                  <input
                     placeholder="Enter Room Name" 
                     id="room" 
                     type="text" 
