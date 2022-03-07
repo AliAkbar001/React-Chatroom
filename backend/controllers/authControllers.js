@@ -1,10 +1,13 @@
 const { User } = require("../model")
 const jwt = require('jsonwebtoken')
+const tokenExpiry = 5*24*60*60
+const createJWT = id => {
+    return jwt.sign({id},'chatroom secret',{
+        expiresIn: tokenExpiry
+    })
+}
 const alertError = (err) =>{
     let errors = {name:'',email:'',password:''}
-    // console.log('Error Message ',err.message)
-    // console.log('Error Code ',err.code)
-    // console.log('Error ',err)
     if(err.code === 11000){
         errors.email = "Email already in use."
     }
@@ -19,6 +22,9 @@ const signup = async (req, res) => {
     console.log("Signup Body", req.body)
     try{
         const user = await User.create(req.body)
+        const token = createJWT(user._id);
+        console.log('Token---' + token)
+        res.cookie('jwt',token,{httpOnly: true, maxAge: tokenExpiry * 1000})
         res.status(201).json({status:201,user})
     } catch(error){
         let errors =  alertError(error)

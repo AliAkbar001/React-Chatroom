@@ -1,24 +1,26 @@
 const express = require('express')
 const app = express()
-const cookieParser = require('cookie-parser')
 const http = require('http').createServer(app)
+
 const socketIo = require('socket.io')
-const { addUser, getUser, removeUser } = require('./helper')
 const io = socketIo(http)
+
 const mongoose = require('mongoose')
-const {Room, Message} = require('./model')
-const router = require('./routes/authRoutes')
 const mongoDB = 'mongodb+srv://ali:ali7676@cluster0.ozphx.mongodb.net/chatroom?retryWrites=true&w=majority'
 const PORT = process.env.PORT || 4000
 
-app.use((req, res, next) => {
-    res.append('Access-Control-Allow-Origin', ['*']);
-    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.append('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+const {Room, Message} = require('./model')
+const router = require('./routes/authRoutes')
+const { addUser, getUser, removeUser } = require('./helper')
+
+const cookieParser = require('cookie-parser')
+const cors = require('cors')
+
+app.use(cors({origin: 'http://localhost:3000', optionsSuccessStatus: 201, credentials:true}))
 app.use(express.json())
 app.use(router)
+app.use(cookieParser())
+
 mongoose.connect(mongoDB).then(()=>console.log("Database Connected")).catch(error=>console.log(error))
   
 app.get('/set-cookies',(req,res)=>{
@@ -28,7 +30,6 @@ app.get('/set-cookies',(req,res)=>{
 })
 app.get('/get-cookies',(req,res)=>{
     const cookies = req.cookies;
-    console.log(cookies)
     res.json(cookies)
 })
 io.on('connection', (socket) =>{

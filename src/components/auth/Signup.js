@@ -16,6 +16,7 @@ const Signup = () => {
     try{
       const res = await fetch('http://localhost:4000/signup',{
       method:'POST',
+      credentials:'include',
       body:JSON.stringify(signupFields),
       headers:{'Content-Type':'application/json'}
       })
