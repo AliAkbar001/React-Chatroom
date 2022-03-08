@@ -48,6 +48,19 @@ userSchema.pre('save', async function (next){
   //  console.log('Before Save', this)
     next()
 })
+userSchema.statics.login = async function (email,password){
+    const user = await this.findOne({email})
+    if(user){
+        const authentication = await bcrypt.compare(password, user.password)
+        if(authentication){
+            return user;
+        }else{
+            throw Error('Incorrect Password')
+        }
+    }else{
+        throw Error('Incorrect Email')
+    }
+}
 // userSchema.post('save', function (doc,next){
 //     console.log('After Save', this)
 //     next()

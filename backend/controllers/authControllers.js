@@ -8,8 +8,17 @@ const createJWT = id => {
 }
 const alertError = (err) =>{
     let errors = {name:'',email:'',password:''}
+    console.log(err.message)
+    console.log(err.ode)
     if(err.code === 11000){
         errors.email = "Email already in use."
+    }
+    
+    if(err.message === 'Incorrect Email'){
+        errors.email = "Incorrect Email."
+    }
+    if(err.message === 'Incorrect Password'){
+        errors.password = "Incorrect Password."
     }
     if(err.message.includes('user validation failed')){
         Object.values(err.errors).forEach(({properties}) => {
@@ -19,11 +28,9 @@ const alertError = (err) =>{
     return errors;
 }   
 const signup = async (req, res) => {
-    console.log("Signup Body", req.body)
     try{
         const user = await User.create(req.body)
         const token = createJWT(user._id);
-        console.log('Token---' + token)
         res.cookie('jwt',token,{httpOnly: true, maxAge: tokenExpiry * 1000})
         res.status(201).json({status:201,user})
     } catch(error){
@@ -31,10 +38,35 @@ const signup = async (req, res) => {
         res.status(400).json({status:400,errors})
     }
 }
-const login = (req, res) => {
-    res.send('login')
+const login = async (req, res) => {
+    try{
+        const user = await User.login(req.body.email,req.body.password)
+        const token = createJWT(user._id);
+        res.cookie('jwt',token,{httpOnly: true, maxAge: tokenExpiry * 1000})
+        res.status(201).json({status:201,user})
+    } catch(error){
+        let errors =  alertError(error)
+        res.status(400).json({status:400,errors})
+    }
+}
+const verifyUser = (req,res,next)=>{
+const token = req.cookies.jwt;
+if(token){
+    jwt.verify(token,'chatroom secret', async(err,decodedToken)=>{
+        console.log('decoded token', decodedToken)
+        if(err){
+            console.log(err.message)
+        }else{
+            let user = await User.findById(decodedToken.id)
+            res.json(user)
+            next()
+        }
+    })
+}else{
+    next()
+}
 }
 const logout = (req, res) => {
     res.send('logout')
 }
-module.exports = {signup, login, logout}
+module.exports = {signup, login, logout, verifyUser}

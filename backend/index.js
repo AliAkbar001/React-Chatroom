@@ -18,8 +18,9 @@ const cors = require('cors')
 
 app.use(cors({origin: 'http://localhost:3000', optionsSuccessStatus: 201, credentials:true}))
 app.use(express.json())
-app.use(router)
 app.use(cookieParser())
+app.use(router)
+
 
 mongoose.connect(mongoDB).then(()=>console.log("Database Connected")).catch(error=>console.log(error))
   
