@@ -6,7 +6,7 @@ const socketIo = require('socket.io')
 const io = socketIo(http)
 
 const mongoose = require('mongoose')
-const mongoDB = 'mongodb+srv://ali:ali7676@cluster0.ozphx.mongodb.net/chatroom?retryWrites=true&w=majority'
+const mongoDB = 'MONGO_DB_STRING'
 const PORT = process.env.PORT || 4000
 
 const {Room, Message} = require('./model')
