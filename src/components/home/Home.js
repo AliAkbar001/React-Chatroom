@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../UserContext'
-import { Link } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import RoomList from './RoomList'
 import io from 'socket.io-client'
 
@@ -37,23 +37,8 @@ const Home = () => {
     console.log(room)
     setRoom('')
   }
-  const setAsAli = () =>{
-    const ali = {
-      name : 'Ali',
-      email : 'ali@gmail.com',
-      password : 'ali123',
-      id : '1' 
-    }
-    setUser(ali)
-  }
-  const setAsAhmed = () =>{
-    const ahmed = {
-      name : 'Ahmed',
-      email : 'ahmed@gmail.com',
-      password : 'ahmed123',
-      id : '2' 
-    }
-    setUser(ahmed)
+  if(!user){
+    return <Navigate to='/login'/>
   }
   return (
     <div className="row">
