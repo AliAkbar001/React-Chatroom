@@ -80,16 +80,16 @@ const Home = () => {
             </form>
         </div>
         </div>
-        <div className="card-action">
+        {/* <div className="card-action">
           <a href="#" onClick={setAsAli}>Set as Ali</a>
           <a href="#" onClick={setAsAhmed}>Set as Ahmed</a>
-        </div>
+        </div> */}
       </div>
     </div>
     <RoomList rooms = {rooms}/>
-    <Link to={'./chat'}>
+    {/* <Link to={'./chat'}>
       <button className='btn'>Chat Room</button>
-    </Link>
+    </Link> */}
   </div>
             
   )
