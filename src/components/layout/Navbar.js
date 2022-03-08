@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { UserContext } from '../../UserContext'
 
 const Navbar = () => {
@@ -20,11 +20,14 @@ const Navbar = () => {
     <nav className='green'>
     <div className="nav-wrapper">
       <a href="#" className="brand-logo">Chatroom</a>
-      <ul id="nav-mobile" className="right hide-on-med-and-down">
+      {user ? <ul id="nav-mobile" className="right hide-on-med-and-down">
+        <li onClick={logout}><a href="#">Logout</a></li>
+      </ul>:
+        <ul id="nav-mobile" className="right hide-on-med-and-down">
         <li><a href="/login">Login</a></li>
         <li><a href="/signup">Signup</a></li>
-        <li onClick={logout}><a href="#">Logout</a></li>
-      </ul>
+      </ul>}
+      
     </div>
   </nav>
   )
